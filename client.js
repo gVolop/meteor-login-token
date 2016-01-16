@@ -69,14 +69,16 @@ LoginToken.checkToken = function (token, params, argName = 'authToken') {
  * user
  * @param  {String} name Name of argument (default "authToken")
  */
-LoginToken.autologin = function (name = 'authToken') {
-  Meteor.startup(function () {
-    const params = getParams(window.location.search);
+LoginToken.autologin = function(name = 'autoToken'){
+  const params = getParams(window.location.search);
 
-    if (params[name]) {
-      LoginToken.checkToken(params[name], params, name);
-    } else {
-      LoginToken.emit('noToken');
-    }
-  });
-};
+  if (params[name]) {
+    LoginToken.checkToken(params[name], params, name);
+  } else {
+    LoginToken.emit('noToken');
+  }
+});
+
+Meteor.startup(() => {
+  LoginToken.autologin();
+})
